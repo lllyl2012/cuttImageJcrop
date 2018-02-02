@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+
+<link rel="stylesheet" href="jquery.Jcrop.css">
+<script src="jquery.min.js"></script>
+<script src="jquery.Jcrop.min.js"></script>
+<style>
+.jcrop-holder #preview-pane {
+	background-color: white;
+	border: 1px solid rgba(0, 0, 0, 0.4);
+	border-radius: 6px;
+	box-shadow: 1px 1px 5px 2px rgba(0, 0, 0, 0.2);
+	display: block;
+	padding: 6px;
+	position: absolute;
+	right: -280px;
+	top: 0;
+	z-index: 2000;
+}
+
+#preview-pane .preview-container {
+	height: 170px;
+	overflow: hidden;
+	width: 250px;
+}
+
+.button.active {
+	opacity: 0.6;
+}
+</style>
+</head>
+<body>
+	<div class="example">
+		<!-- This is the image we're attaching Jcrop to -->
+		<img src="1.jpg" id="target" alt="[Jcrop Example]">
+		<div id="preview-pane">
+			<div class="preview-container">
+				<img src="1.jpg" class="jcrop-preview" alt="Preview">
+			</div>
+		</div>
+	</div>
+	<div class="example">
+		<!-- This is the form that our event handler fills -->
+		<form id="coords" class="coords" onsubmit="return false;"
+			action="">
+			<label>X1 <input type="text" class="input" size="6" id="x1"
+				name="x1" />
+			</label> <label>Y1 <input type="text" class="input" size="6" id="y1"
+				name="y1" />
+			</label> <label>X2 <input type="text" class="input" size="6" id="x2"
+				name="x2" />
+			</label> <label>Y2 <input type="text" class="input" size="6" id="y2"
+				name="y2" />
+			</label> <label>W <input type="text" class="input" size="6" id="w"
+				name="w" />
+			</label> <label>H <input type="text" class="input" size="6" id="h"
+				name="h" />
+			</label>
+		</form>
+	</div>
+	<script type="text/javascript">
+		jQuery(function($) {
+			var jcrop_api;
+			$('#target').Jcrop({
+				onChange : showCoords,
+				onSelect : showCoords,
+				onRelease : clearCoords
+			}, function() {
+				jcrop_api = this;
+			});
+			$('#coords').on(
+					'change',
+					'input',
+					function(e) {
+						var x1 = $('#x1').val(), x2 = $('#x2').val(), y1 = $(
+								'#y1').val(), y2 = $('#y2').val();
+						jcrop_api.setSelect([ x1, y1, x2, y2 ]);
+					});
+		});
+		// Simple event handler, called from onChange and onSelect
+		// event handlers, as per the Jcrop invocation above
+		function showCoords(c) {
+			$('#x1').val(c.x);
+			$('#y1').val(c.y);
+			$('#x2').val(c.x2);
+			$('#y2').val(c.y2);
+			$('#w').val(c.w);
+			$('#h').val(c.h);
+		};
+		function clearCoords() {
+			$('#coords input').val('');
+		};
+	</script>
+</body>
+</html>
